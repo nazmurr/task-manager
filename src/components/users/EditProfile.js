@@ -5,6 +5,7 @@ import { API_BASE_URL } from '../../apis/constant';
 import { getUserProfile, updateUserProfile, clearUserError } from '../../actions';
 import UserForm from './UserForm';
 import history from '../../history';
+import { EDIT_PROFILE_TITLE, SITE_TITLE } from '../utils/PageTitles';
 
 class EditProfile extends React.Component {
     constructor(props) {
@@ -24,6 +25,7 @@ class EditProfile extends React.Component {
 
     componentDidMount() {
         if (!this.props.isSignedIn) history.push('/');
+        document.title = `${EDIT_PROFILE_TITLE} | ${SITE_TITLE}`;
         const token = sessionStorage.getItem("tmToken") !== null ? sessionStorage.getItem("tmToken"): '';
         this.props.getUserProfile(token);
     }

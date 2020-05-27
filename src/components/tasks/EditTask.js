@@ -5,6 +5,7 @@ import { updateTask, getTask, clearTaskError } from '../../actions';
 import TaskForm from './TaskForm';
 import history from '../../history';
 import Loader from '../utils/Loader';
+import { EDIT_TASK_TITLE, SITE_TITLE } from '../utils/PageTitles';
 
 class EditTask extends React.Component {
     onSubmit = formValues => {
@@ -14,6 +15,7 @@ class EditTask extends React.Component {
 
     componentDidMount() {
         if (this.props.isSignedIn === null) history.push('/login');
+        document.title = `${EDIT_TASK_TITLE} | ${SITE_TITLE}`;
         const token = sessionStorage.getItem("tmToken") !== null ? sessionStorage.getItem("tmToken"): '';
         this.props.getTask(this.props.match.params.id, token);
     }

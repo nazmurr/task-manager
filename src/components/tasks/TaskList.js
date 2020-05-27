@@ -4,9 +4,11 @@ import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { getAllTasks, clearAllTasks } from '../../actions';
 import Loader from '../utils/Loader';
+import { ALL_TASKS_TITLE, SITE_TITLE } from '../utils/PageTitles';
 
 class TaskList extends React.Component {
     componentDidMount() {
+        document.title = `${ALL_TASKS_TITLE} | ${SITE_TITLE}`;
         const token = sessionStorage.getItem("tmToken") !== null ? sessionStorage.getItem("tmToken"): '';
         if (this.props.fetchTaskList !== false) this.props.getAllTasks(token);
     }

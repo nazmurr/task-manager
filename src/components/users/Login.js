@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { signIn, clearUserError } from '../../actions';
 import UserForm from './UserForm';
 import history from '../../history';
+import { SIGN_IN_TITLE, SITE_TITLE } from '../utils/PageTitles';
 
 class Login extends React.Component {
     onSubmit = formValues => {
@@ -11,6 +12,7 @@ class Login extends React.Component {
 
     componentDidMount() {
         if (this.props.isSignedIn) history.push('/');
+        document.title = `${SIGN_IN_TITLE} | ${SITE_TITLE}`;
     }
 
     componentDidUpdate() {
