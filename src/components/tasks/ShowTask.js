@@ -5,17 +5,22 @@ import ReactHtmlParser from 'react-html-parser';
 import { getTask } from '../../actions';
 import history from '../../history';
 import Loader from '../utils/Loader';
+import { SITE_TITLE } from '../utils/PageTitles';
 
 class ShowTask extends React.Component {
 
     componentDidMount() {
         if (this.props.isSignedIn === null) history.push('/login');
+        if (this.props.task) document.title = `${this.props.task.title} | ${SITE_TITLE}`;
+        else document.title = `${SITE_TITLE}`;
         const token = sessionStorage.getItem("tmToken") !== null ? sessionStorage.getItem("tmToken"): '';
         this.props.getTask(this.props.match.params.id, token);
     }
 
     componentDidUpdate() {
         if (this.props.isSignedIn === null) history.push('/login');
+        if (this.props.task) document.title = `${this.props.task.title} | ${SITE_TITLE}`;
+        else document.title = `${SITE_TITLE}`;
     }
 
     renderError(error) {

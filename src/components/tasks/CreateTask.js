@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { createTask, clearTaskError } from '../../actions';
 import TaskForm from './TaskForm';
 import history from '../../history';
+import { CREATE_TASK_TITLE, SITE_TITLE } from '../utils/PageTitles';
 
 class CreateTask extends React.Component {
     onSubmit = formValues => {
@@ -12,6 +13,7 @@ class CreateTask extends React.Component {
 
     componentDidMount() {
         if (this.props.isSignedIn === null) history.push('/login');
+        document.title = `${CREATE_TASK_TITLE} | ${SITE_TITLE}`;
     }
 
     componentDidUpdate() {

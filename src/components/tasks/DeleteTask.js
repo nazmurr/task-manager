@@ -5,9 +5,11 @@ import TaskList from './TaskList';
 import Modal from '../Modal';
 import history from '../../history';
 import { getTask, deleteTask } from '../../actions';
+import { DELETE_TASK_TITLE, SITE_TITLE } from '../utils/PageTitles';
 
 class DeleteTask extends React.Component {
     componentDidMount() {
+        document.title = `${DELETE_TASK_TITLE} | ${SITE_TITLE}`;
         const token = sessionStorage.getItem("tmToken") !== null ? sessionStorage.getItem("tmToken"): '';
         this.props.getTask(this.props.match.params.id, token);
     }

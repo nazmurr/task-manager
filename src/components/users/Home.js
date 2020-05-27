@@ -1,7 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { SITE_TITLE } from '../utils/PageTitles';
 
 const Home = () => {
+    
+    useEffect(() => {
+        document.title = SITE_TITLE;
+    }, []);
+
     return (
         <div className="ui fluid card">
             <div className="content">
