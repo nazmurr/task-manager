@@ -1,0 +1,52 @@
+import React from 'react';
+import { connect } from 'react-redux';
+import { signUp, clearUserError } from '../../actions';
+import UserForm from './UserForm';
+import history from '../../history';
+
+class Register extends React.Component {
+    onSubmit = formValues => {
+        this.props.signUp(formValues);
+    }
+
+    componentDidMount() {
+        if (this.props.isSignedIn) history.push('/');
+    }
+
+    componentDidUpdate() {
+        if (this.props.isSignedIn) history.push('/');
+    }
+
+    componentWillUnmount() {
+        this.props.clearUserError();
+    }
+
+    renderError(error) {
+        return (
+            <div className="ui error message">
+                <div className="header">{error}</div>
+            </div>
+        );
+    }
+
+    render() {
+        return (
+            <div>
+                <h3>Register</h3>
+                <UserForm formType="register" onSubmit={this.onSubmit} />
+                { this.props.error ? this.renderError(this.props.error): null } 
+            </div>
+        );
+    }
+
+}
+
+const mapStateToProps = state => {
+    //console.log(state);
+    return { 
+        isSignedIn: state.auth.isSignedIn,
+        error: state.auth.error ? state.auth.error : null 
+    };
+}
+
+export default connect(mapStateToProps, { signUp, clearUserError })(Register);
