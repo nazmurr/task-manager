@@ -13,7 +13,7 @@ import CreateTask from './tasks/CreateTask';
 import EditTask from './tasks/EditTask';
 import DeleteTask from './tasks/DeleteTask';
 import ShowTask from './tasks/ShowTask';
-import { getUserProfile } from '../actions';
+import { getUserProfile, clearAuth } from '../actions';
 import history from '../history';
 import ScrollToTop from './ScrollToTop';
 
@@ -21,7 +21,8 @@ class App extends React.Component {
 
     componentDidMount() {
         const token = sessionStorage.getItem("tmToken") !== null ? sessionStorage.getItem("tmToken"): '';
-        this.props.getUserProfile(token);
+        if (token) this.props.getUserProfile(token);
+        else this.props.clearAuth();
     }
 
     render() {
@@ -58,4 +59,4 @@ const mapStateToProps = state => {
     };
 }
 
-export default connect(mapStateToProps, { getUserProfile })(App);
+export default connect(mapStateToProps, { getUserProfile, clearAuth })(App);
