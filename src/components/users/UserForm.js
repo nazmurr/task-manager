@@ -1,7 +1,9 @@
 import React from 'react';
-import { Field, reduxForm } from 'redux-form';
+import { connect } from 'react-redux';
+import { Field, reduxForm, isDirty } from 'redux-form';
 
 class UserForm extends React.Component {
+
     renderError({ error, touched }) {
         if (touched && error) {
             return (
@@ -41,25 +43,48 @@ class UserForm extends React.Component {
         )
     }
 
-
-    renderSubmitBtn(formType) {
+    renderSubmitBtn(formType, submitDisabled) {
         switch (formType) {
             case 'login':
-                return <button className="ui button primary">Login</button>
+                return (
+                    <button 
+                        className="ui button primary" 
+                        disabled={submitDisabled}>
+                        {submitDisabled ? 'Loading...' : 'Login'}
+                    </button>
+                );
             
             case 'register':
-                return <button className="ui button primary">Register</button>
+                return (
+                    <button 
+                        className="ui button primary" 
+                        disabled={submitDisabled}>
+                        {submitDisabled ? 'Loading...' : 'Register'}
+                    </button>
+                );
             
             case 'editprofile':
-                return <button className="ui button primary">Update</button>
-
+                return (
+                    <button 
+                        className="ui button primary" 
+                        disabled={submitDisabled}>
+                        {submitDisabled ? 'Updating...' : 'Update'}
+                    </button>
+                );
+            
             default:
-                return <button className="ui button primary">Login</button>
+                return (
+                    <button 
+                        className="ui button primary" 
+                        disabled={submitDisabled}>
+                        {submitDisabled ? 'Loading...' : 'Login'}
+                    </button>
+                );
         }
     }
 
     onSubmit = formValues => {
-        this.props.onSubmit(formValues);
+        this.props.onSubmit(formValues, this.props.isDirty);
     }
 
     render() {
@@ -69,7 +94,7 @@ class UserForm extends React.Component {
                 <Field name="email" type="email" component={this.renderInput} label="Enter Email" />
                 <Field name="password" type="password" component={this.renderInput} label="Enter Password" />
                 { this.props.formType === 'editprofile' ?  <Field key={this.props.fileInputKey} label="Upload your profile picture" name="avatar" type="file" component={this.renderFileInput}></Field>: null }
-                { this.renderSubmitBtn(this.props.formType) }
+                { this.renderSubmitBtn(this.props.formType, this.props.submitDisabled) }
             </form>
 
         );
@@ -102,9 +127,16 @@ const validate = (formValues, props) => {
     return errors;
 }
 
+const mapStateToProps = state => {
+    return { 
+        isDirty: isDirty('userForm')(state)
+    };
+}
+
 export default reduxForm({
     form: 'userForm',
     touchOnBlur: false,
+    enableReinitialize: true,
     validate
-})(UserForm);
+})(connect( mapStateToProps, null)(UserForm));
 
