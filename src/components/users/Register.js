@@ -6,7 +6,16 @@ import history from '../../history';
 import { SIGN_UP_TITLE, SITE_TITLE } from '../utils/PageTitles';
 
 class Register extends React.Component {
+    
+    state = {
+        submitDisabled: false
+    };
+
     onSubmit = formValues => {
+        this.setState(prevState => ({
+            submitDisabled: !prevState.submitDisabled,
+        }));
+        this.props.clearUserError();
         this.props.signUp(formValues);
     }
 
@@ -15,8 +24,12 @@ class Register extends React.Component {
         document.title = `${SIGN_UP_TITLE} | ${SITE_TITLE}`;
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps, prevState) {
         if (this.props.isSignedIn) history.push('/');
+
+        if (this.props.error && prevState.submitDisabled) { 
+            this.setState({submitDisabled: !prevState.submitDisabled});
+        }
     }
 
     componentWillUnmount() {
@@ -35,7 +48,7 @@ class Register extends React.Component {
         return (
             <div>
                 <h3>Register</h3>
-                <UserForm formType="register" onSubmit={this.onSubmit} />
+                <UserForm formType="register" onSubmit={this.onSubmit} submitDisabled={this.state.submitDisabled} />
                 { this.props.error ? this.renderError(this.props.error): null } 
             </div>
         );

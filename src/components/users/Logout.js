@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { signOut, clearAllTasks } from '../../actions';
+import Loader from '../utils/Loader';
 
 class Logout extends React.Component {
 
@@ -11,7 +12,7 @@ class Logout extends React.Component {
     }
 
     render() {
-        return null;
+        return <Loader />;
     }
 
 }

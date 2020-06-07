@@ -13,12 +13,16 @@ class EditProfile extends React.Component {
      
         this.state = {
           showSuccess: false,
+          submitDisabled: false,
           fileInputKey: Date.now()
         };
     }
 
-    onSubmit = formValues => {
-        this.setState({showSuccess: false});
+    onSubmit = (formValues, isDirty) => {
+        this.setState(prevState => ({
+            showSuccess: false,
+            submitDisabled: isDirty ? !prevState.submitDisabled : false,
+        }));
         const token = sessionStorage.getItem("tmToken") !== null ? sessionStorage.getItem("tmToken"): '';
         this.props.updateUserProfile(formValues, token);
     }
@@ -30,10 +34,10 @@ class EditProfile extends React.Component {
         this.props.getUserProfile(token);
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate(prevProps, prevState) {
         if (!this.props.isSignedIn) history.push('/');
         if (this.props.user.updatedAt !== prevProps.user.updatedAt) {
-            this.setState({showSuccess: true, fileInputKey: Date.now()});
+            this.setState({showSuccess: true, submitDisabled: !prevState.submitDisabled, fileInputKey: Date.now()});
             const token = sessionStorage.getItem("tmToken") !== null ? sessionStorage.getItem("tmToken"): '';
             this.props.getUserProfile(token);
         }
@@ -66,7 +70,13 @@ class EditProfile extends React.Component {
                 <h3>Edit Profile</h3>
                 <div className="ui grid container">
                     <div className="twelve wide column">
-                        <UserForm fileInputKey={this.state.fileInputKey} initialValues={_.pick(this.props.user, 'name', 'email')} formType="editprofile" onSubmit={this.onSubmit} />
+                        <UserForm 
+                            fileInputKey={this.state.fileInputKey} 
+                            initialValues={_.pick(this.props.user, 'name', 'email')} 
+                            formType="editprofile" 
+                            onSubmit={this.onSubmit} 
+                            submitDisabled={this.state.submitDisabled}
+                        />
                         { this.props.error ? this.renderError(this.props.error): null }
                         { this.state.showSuccess ? this.renderSuccess(): null } 
                     </div>

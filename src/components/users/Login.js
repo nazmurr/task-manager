@@ -6,8 +6,21 @@ import history from '../../history';
 import { SIGN_IN_TITLE, SITE_TITLE } from '../utils/PageTitles';
 
 class Login extends React.Component {
+
+    state = {
+        submitDisabled: false
+    };
+
     onSubmit = formValues => {
+        this.setState(prevState => ({
+            submitDisabled: !prevState.submitDisabled,
+        }));
+        this.props.clearUserError();
         this.props.signIn(formValues);
+    }
+
+    onTextChange = value => {
+        console.log(value);
     }
 
     componentDidMount() {
@@ -15,8 +28,12 @@ class Login extends React.Component {
         document.title = `${SIGN_IN_TITLE} | ${SITE_TITLE}`;
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps, prevState) {
         if (this.props.isSignedIn) history.push('/');
+
+        if (this.props.error && prevState.submitDisabled) {
+            this.setState({submitDisabled: !prevState.submitDisabled});
+        }
     }
 
     componentWillUnmount() {
@@ -35,7 +52,7 @@ class Login extends React.Component {
         return (
             <div>
                 <h3>Login</h3>
-                <UserForm formType="login" onSubmit={this.onSubmit} />
+                <UserForm formType="login" onSubmit={this.onSubmit} onTextChange={this.onTextChange} submitDisabled={this.state.submitDisabled} />
                 { this.props.error ? this.renderError(this.props.error): null } 
             </div>
         );

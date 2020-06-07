@@ -35,6 +35,7 @@ export const signOut = token => async dispatch => {
     const config = {
         headers: { Authorization: `Bearer ${token}` }
     };
+
     try {
         const response = await axios.post('/users/logout', {}, config);
         dispatch({ type: SIGN_OUT, payload: response.data });
@@ -68,6 +69,7 @@ export const updateUserProfile = (formValues, token) => async (dispatch, getStat
     const config = {
         headers: { Authorization: `Bearer ${token}` }
     };
+
     try {
         const response = await axios.patch('/users/me', { ...formValues }, config);
         dispatch({ type: UPDATE_USER_PROFILE, payload: response.data });
